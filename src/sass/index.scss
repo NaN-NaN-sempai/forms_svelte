@@ -1,0 +1,79 @@
+@use "../../src/sass/palette" as palette;
+
+* {
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+
+    color: palette.$mainDark;
+    outline: none;
+
+    /* remove blue highlight android */
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+
+    --time: .2s;
+
+    transition:
+        background var(--time),
+        color var(--time),
+        border var(--time);
+}
+
+object {
+    pointer-events: none;
+}
+
+html, body {
+    width: 100vw;
+}
+body {
+    background-color: palette.$mainColor;
+}
+
+._toastContainer {
+    li {
+        border-top: 10px solid palette.$secondColor;
+        border-radius: 10px;
+
+        box-shadow: 0 0 10px 0 palette.$mainColor;
+    }
+}
+
+
+
+*.favorite::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 400;
+    content: "\f005";
+    color: orange;
+}
+
+/* width */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: palette.$secondColor; 
+    border-radius: 20px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: palette.$secondColorLighter; 
+}
+
+
+
+/* Selection */
+::selection {
+    color: palette.$secondColor;
+    background: palette.$secondColorLighter;
+}
