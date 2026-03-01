@@ -16,12 +16,17 @@
         items.push({
             ignore: true,
             type: "other",
-            selected: false,
-            sendValue: "other"
+            selected: other.selected || false,
+            sendValue: "other",
+            onSelect: other.onSelect,
+            onDeselect: other.onDeselect
         });
-        console.log(items);
-        
+        if(items.at(-1).selected)
+        items.at(-1).onSelect?.();
     }
+
+    console.log("OG",other);
+    
 
     let listDOM = [];
 
@@ -89,23 +94,28 @@
         if(!target.selected) {
             target.onDeselect?.();
         }
-
-        isAllSelected = items.every(item => item.selected);
+      
+        checkAllSelected();
 
         items = items;
     }
 
     let isAllSelected = false;
+    const checkAllSelected = () => {
+        isAllSelected = items.filter(({type}) => type != "other").every(item => item.selected);
+    }
+    const checkAllDeselected = () => items.filter(({type}) => type != "other").every(item => !item.selected);
     const selectAll = () => {        
-        isAllSelected = items.every(item => item.selected);
+        checkAllSelected();
 
         if(isAllSelected) {
             items.forEach((e,i) => {
-                multipleSelection(items.length - 1 - i)
+                if(items[items.length - 1 - i].type != "other")
+                    multipleSelection(items.length - 1 - i)
             });
         } else {
             items.forEach((e,i) => {
-                if(!e.selected) multipleSelection(i)
+                if(!e.selected && e.type != "other") multipleSelection(i)
             });
         }
     }
@@ -117,6 +127,11 @@
     const isMandatory = type.includes("mandatory");
 
     const isIcon = type.includes("icon"); // TODO
+
+    if(isMandatory && checkAllDeselected()) {        
+        items[0].selected = true;
+        items[0].onSelect?.();
+    }
 </script>
 
 
@@ -182,20 +197,24 @@
         class:refuseCheck={animatingIndex == items.length - 1}
         on:on:animationend={() => stopAnimation(items.length - 1)}>
 
-        <input type="checkbox" {name} id="{name}-{items.length - 1}" checked={items.at(-1).selected}
+
+        <input type="checkbox" {name}
+            id="{name}-{items.length - 1}"
+            checked={items.at(-1).selected}
             class:simpleInput={!isBlock}
             on:click={(e) => 
                 isSingle?
                     singleSelection(items.length - 1, e):
                     multipleSelection(items.length - 1, e)
-                }
-            >
+            }
+        >
+
         <div class="labelSelector">            
             <p>
                 {other.text}
             </p>
-            {#if other.input == "text"}
-                <SimpleInput type="text" origin={{
+            {#if other.input != undefined && !other.ignoreInput}
+                <SimpleInput type={other.input} origin={{
                     placeholder: other.placeholder,
                     onInput: (e) => {
                         items.at(-1).sendValue = e.target.value;
@@ -245,20 +264,24 @@ $mainDarker: color-mix(in srgb, #{palette.$mainColor}, #ffa638 15%);
         display: flex;
         align-items: center;
         gap: 5px;
-        padding-inline: 40px;
+        padding-inline: 40px 10px;
         padding-block: 5px;
         border-radius: 5px;
         width: 100%;
         max-width: 300px;
+        cursor: pointer;
+        
+        outline: 2px solid transparent;
 
         background: $mainLighter;
 
         box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.25);
         
-        transition: box-shadow 1s;
+        transition: box-shadow 1s, outline 1s;
 
         &.selected {
             box-shadow: 0 0 8px 2px palette.$secondColor;
+            outline: 2px solid palette.$secondColor;
         }
 
         :global(:has(#darkModeSwitch:checked)) & {
@@ -267,6 +290,14 @@ $mainDarker: color-mix(in srgb, #{palette.$mainColor}, #ffa638 15%);
             & input[type="checkbox"]:not(:checked)::after {
                 color: color-mix(in srgb, #{palette.$mainColor}, #{palette.$secondColor} 40%);
             }
+        }
+
+        .labelSelector {
+            width: 100%;
+        }
+
+        input[type="checkbox"]::after {
+            font-size: 18px;
         }
 
         

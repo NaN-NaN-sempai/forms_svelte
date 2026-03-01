@@ -23,7 +23,10 @@
             <h3 class="title">{@html item.text}</h3>
         
         {:else if item.type == "text"}
-            <p>{@html item.text}</p>
+            <p
+                class:centered={(item.textConfig || []).includes("center")}
+                class:strong={(item.textConfig || []).includes("strong")}
+            >{@html item.text}</p>
 
         {:else if item.type == "hr"}
             <hr style="margin{item.marginType? "-" + item.marginType : ""}: {item.marginSize};">
@@ -49,7 +52,7 @@
             {#if item.inputType == "select"}
                 <ListSelect name={item.name} type={item.data} items={item.items} origin={item} other={item.other} />
 
-            {:else if ["text", "number", "textarea"].includes(item.inputType)}
+            {:else if ["text", "number", "password", "email", "textarea", "tel"].includes(item.inputType)}
                 <SimpleInput type={item.inputType} origin={item} />            
             {/if}
         {:else if item.type == "mandatory"}
@@ -99,6 +102,15 @@
         .title {
             text-align: center;
             margin-bottom: 20px;
+        }
+
+        p {
+            &.centered {
+                text-align: center;
+            }
+            &.strong {
+                font-weight: bold;
+            }
         }
         
         .sideNote {

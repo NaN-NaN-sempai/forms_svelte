@@ -1,34 +1,86 @@
 <script>
+    import formatNumber from '$lib/formatNumber';
+    import CheckBox from './checkBox.svelte';
+
     export let type = "text";
 
     export let origin = {};
 
-
-    console.log("TYPE", type, origin);
-
     const onInput = (...args) => {
         if(origin.onInput)
             origin.onInput(...args);
+
+        if(origin.minified)
+            textResizeWidth(...args);
         
         if(type == "textarea")
             textAreaResize(...args);
+
+        if(type == "tel")
+            inputFormatTel(...args);
     }
+
+    let input;
     
     const textAreaResize = (e) => {
-        const textarea = e.target;
-        const { value } = textarea;
+        const { value } = input;
 
         const lineBreaks = value.split("\n").length;
         
-        textarea.style.setProperty("--line-count", lineBreaks);
+        input.style.setProperty("--line-count", lineBreaks);
+    }
+
+    const textResizeWidth = (e) => {
+        const { value } = input;
+
+        const lineBreaks = value.split("\n");
+
+        const longest = lineBreaks.reduce((a, b) => a.length > b.length ? a : b);
+
+        input.style.setProperty("--char-count", longest.length);        
     }
     
+
+    let ignoredFormat = false;
+    const inputFormatTel = (e) => {
+        const { value } = input;
+        
+        if(!ignoredFormat)
+            input.value = formatNumber(value);
+    }
 </script>
 
 {#if type == "textarea"}
-    <textarea class="input"name={origin.name} bind:value={origin.value} placeholder={origin.placeholder} on:input={onInput}></textarea>
+    <textarea
+        class:minified={origin.minified}
+        class="input"name={origin.name}
+        style="--maxWidth: {origin.maxWidth || "100%"}"
+        bind:value={origin.value}
+        placeholder={origin.placeholder}
+        bind:this={input}
+        on:input={onInput}></textarea>
 {:else}
-    <input {type} name={origin.name} class="input" bind:value={origin.value} placeholder={origin.placeholder} on:input={onInput} />
+    <input {type}
+        class:minified={origin.minified}
+        class="input"
+        style="--maxWidth: {origin.maxWidth || "100%"}"
+        name={origin.name}
+        pattern={origin.pattern}
+        bind:value={origin.value}
+        placeholder={origin.placeholder}
+        bind:this={input}
+        on:input={onInput} />
+
+    {#if type == "tel"}
+        <label>
+            <CheckBox bind:checked={ignoredFormat} origin={{
+                onInput() { inputFormatTel(input); },
+            }}>
+                <small>Ignorar formatação</small>
+            </CheckBox>
+            
+        </label>
+    {/if}
 {/if}
 
 
@@ -46,7 +98,12 @@ $mainDarker: color-mix(in srgb, #{palette.$mainColor}, #ffa638 15%);
     padding-inline: 10px;
     color: color-mix(in srgb, #{palette.$mainDark}, rgb(0, 0, 0) 20%);
 
+    --maxWidth: 100%;
+
     width: 100%;
+    max-width: var(--maxWidth);
+    min-width: 50px;
+    box-sizing: border-box;
 
     border-bottom: 4px solid palette.$secondColor;
     box-shadow: inset 0 0 0 2px palette.$secondColor;
@@ -54,12 +111,20 @@ $mainDarker: color-mix(in srgb, #{palette.$mainColor}, #ffa638 15%);
     :global(:has(#darkModeSwitch:checked)) & {
         background: palette.$bgColor;
     }
+
+    &.minified {
+        --char-count: 1;
+
+        width: calc(((var(--char-count) + 2) * .59em) + 20px);
+        min-width: calc(7 * .65em);
+    }
 }
 
 textarea {
     --line-count: 1;
     resize: none;
-    min-height: 2rem;
-    height: calc(var(--line-count, 1) * .95rem);
+    min-height: 3rem;
+    height: calc((var(--line-count, 1) * .97rem) + 10px);
 }
+
 </style>
