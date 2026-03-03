@@ -79,7 +79,7 @@
                 <SimpleInput type={item.inputType} origin={item} />            
             {/if}
         {:else if item.type == "mandatory"}
-            <p class="mandatory"></p>
+            <span class="mandatory"></span>
         {/if}
 
         {/if}
@@ -104,15 +104,19 @@
     
     
     .mainContainer {
-        position: relative;
-        left: 50%;
-        transform: translateX(-50%);
-        background: palette.$mainColor;
-        width: 80%;
-        border-top: 15px solid palette.$secondColor;
-        border-radius: 10px;
+        margin-inline: auto;
+        box-sizing: border-box;
+        max-width: 700px;
         padding: 30px;
         margin-block: 20px;
+        
+        background: palette.$mainColor;
+        border-top: 15px solid palette.$secondColor;
+        border-radius: 10px;
+
+        @media screen and (max-width: 740px) {
+            margin-inline: 20px;
+        }
 
         :global(:has(#darkModeSwitch:checked)) & {
             box-shadow: 0 3px 5px rgba(0, 0, 0, 0.25);

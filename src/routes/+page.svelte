@@ -1,11 +1,8 @@
 <script>
-    import FormBody from "../components/formBody.svelte";
-    import InputColor from "$components/inputs/color/inputColor.svelte";
-    import ColorList from "$components/inputs/color/colorList.svelte";
     import { toast } from '@zerodevx/svelte-toast';
-    import { error } from "@sveltejs/kit";
     import { Form } from "$lib/formBuilder";
     import { onMount } from "svelte";
+    import FormBody from '$components/formBody.svelte';
 
 
 
@@ -15,14 +12,14 @@
 
 
 
-    let formContent = Form.List(        
+    let formContent = Form.Body(        
         Form.Section({ title: "Formulário de Serviços de Design" },
             Form.text("Obrigado por escolher nossa equipe de design!<br>Preencha as informações abaixo com o máximo de detalhes possível para que possamos criar algo profissional e alinhado com sua marca."),
             Form.line,
             Form.text("Após finalizar o formulário, toque no botão do Whatsapp no fim da página para entrar em contato com a equipe de design.<br><br>Responderemos o mais rápido possivel."),
         ),    
 
-        Form.Section({ title: "Modo de Leitura" }, 
+        Form.Section({ title: "Modo de Leitura", mainSection: false }, 
             Form.darkModeSwitch,
         ),
 
@@ -177,7 +174,7 @@
                         onSelect() { formContent.getListById("sendLogo").forEach(e => e.ignore = false); reloadList() },
                         onDeselect() { formContent.getListById("sendLogo").forEach(e => e.ignore = true); reloadList() }
                     },
-                    { name: "Parcialmente", sendValue: "Parcialmente",
+                    { name: "Parcialmente", sendValue: "parcialmente",
                         onSelect() { formContent.getListById("sendLogo").forEach(e => e.ignore = false); reloadList() },
                         onDeselect() { formContent.getListById("sendLogo").forEach(e => e.ignore = true); reloadList() }
                     },
@@ -297,7 +294,7 @@
         --success: #16a34a;
     }
 
-    :global(body.pyVariedades) {
+    /* :global(body.pyVariedades) {
         --bgColor: #0b0f1a;
         --mainColor: #12182a;
 
@@ -310,6 +307,6 @@
         --mandatory: #ff4757;
         --error: var(--mandatory);
         --success: #2ed573;
-    }
+    } */
     
 </style>

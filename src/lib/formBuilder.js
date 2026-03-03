@@ -1,4 +1,4 @@
-export class FormList {
+export class Form_Body {
     constructor(...sections) {
         this.sections = sections;
 
@@ -81,7 +81,7 @@ export class FormList {
         })
     }
 }
-export class Section {
+export class Form_Section {
     constructor(config = {}, ...children) {
         const defaultConfig = {
             mainSection: true
@@ -118,15 +118,17 @@ export class Form {
         return this;
     }
 
-    static List = (...sections) => new FormList(...sections);
+    static Body = (...sections) => new Form_Body(...sections);
 
+    static Section = (...ags) => new Form_Section(...ags);
+    
+    
     config = (obj) => {
         Object.assign(this, obj);
 
         return this;
     }
 
-    static Section = (...ags) => new Section(...ags);
 
     static sectionTitle = (text) => {
         let inst = new this("section title");

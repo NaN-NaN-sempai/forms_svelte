@@ -23,11 +23,8 @@
     let input;
     
     const textAreaResize = (e) => {
-        const { value } = input;
-
-        const lineBreaks = value.split("\n").length;
-        
-        input.style.setProperty("--line-count", lineBreaks);
+        input.style.height = "auto";
+        input.style.height = input.scrollHeight + 3 + "px";
     }
 
     const textResizeWidth = (e) => {
@@ -125,7 +122,6 @@ textarea {
     --line-count: 1;
     resize: none;
     min-height: 3rem;
-    height: calc((var(--line-count, 1) * .97rem) + 10px);
 }
 
 </style>
