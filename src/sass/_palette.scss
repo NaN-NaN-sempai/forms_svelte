@@ -11,7 +11,7 @@
 }
 
 
-:has(#darkModeSwitch:checked) {    
+:root:has(#darkModeSwitch:checked) {    
     --bgColor: #FFE2B6;
     --mainColor: #FFD39C;
     --secondColor: #E9773C;

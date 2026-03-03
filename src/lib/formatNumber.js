@@ -1,9 +1,11 @@
 export default function (number, disable = false) {
     if(!number) return '';
-    if(disable) return number;
+    const onylNumber = number.replace(/[^0-9]/g, ''); 
 
-    
-    const onylNumber = number.replace(/[^0-9]/g, '');  
+
+    if(disable) return onylNumber;
+
+     
     if(onylNumber.length == 0) return '';
     
     if(onylNumber.length < 8) return number;

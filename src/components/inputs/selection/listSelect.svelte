@@ -10,6 +10,8 @@
 
     export let items = [];
 
+
+
     export let other;
 
     if(other != undefined && !items.find(({type}) => type == "other")) {
@@ -17,16 +19,13 @@
             ignore: true,
             type: "other",
             selected: other.selected || false,
-            sendValue: "other",
+            sendValue: "",
             onSelect: other.onSelect,
             onDeselect: other.onDeselect
         });
         if(items.at(-1).selected)
         items.at(-1).onSelect?.();
     }
-
-    console.log("OG",other);
-    
 
     let listDOM = [];
 
@@ -216,6 +215,7 @@
             {#if other.input != undefined && !other.ignoreInput}
                 <SimpleInput type={other.input} origin={{
                     placeholder: other.placeholder,
+                    value: items.at(-1).sendValue,
                     onInput: (e) => {
                         items.at(-1).sendValue = e.target.value;
                     }

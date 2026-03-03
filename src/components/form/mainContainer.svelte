@@ -1,6 +1,9 @@
 <script>
+    import ColorList from "$components/inputs/color/colorList.svelte";
+    import InputColor from "$components/inputs/color/inputColor.svelte";
     import ListSelect from "$components/inputs/selection/listSelect.svelte";
     import SimpleInput from "$components/inputs/simpleInput.svelte";
+    import SubmitButton from "$components/inputs/submitButton.svelte";
 
     export let content = {
         mainSection: true,
@@ -16,8 +19,15 @@
     {#each content.children as item}
         {#if !item.ignore}
         
+        
         {#if item.type == "section title"}
             <h2 class="title">{@html item.text}</h2>
+
+        {:else if item.type == "darkModeSwitch"}
+            <label>
+                temp DM
+                <input type="checkbox" id="darkModeSwitch" checked />
+            </label>
 
         {:else if item.type == "input title"}
             <h3 class="title">{@html item.text}</h3>
@@ -27,18 +37,25 @@
                 class:centered={(item.textConfig || []).includes("center")}
                 class:strong={(item.textConfig || []).includes("strong")}
             >{@html item.text}</p>
+            
+        {:else if item.type == "hint"}
+            <p
+                class="hint"
+                class:centered={(item.textConfig || []).includes("center")}
+                class:strong={(item.textConfig || []).includes("strong")}
+            >{@html item.text}</p>
+            
+        {:else if item.type == "submit"}
+            <SubmitButton origin={item}
+            >
+            {@html item.text || "Enviar"}
+            </SubmitButton>
 
         {:else if item.type == "hr"}
             <hr style="margin{item.marginType? "-" + item.marginType : ""}: {item.marginSize};">
 
         {:else if item.type == "br"}
             <div class="spacer" style="--size: {item.marginSize};"></div>
-
-        {:else if item.type == "darkModeSwitch"}
-            <label>
-                temp DM
-                <input type="checkbox" id="darkModeSwitch" checked />
-            </label>
 
         {:else if item.type == "input"}
             {#if item.readonly}
@@ -51,6 +68,12 @@
 
             {#if item.inputType == "select"}
                 <ListSelect name={item.name} type={item.data} items={item.items} origin={item} other={item.other} />
+
+            {:else if item.inputType == "color"}
+                <InputColor origin={item} />
+
+            {:else if item.inputType == "colorList"}
+                <ColorList origin={item} />
 
             {:else if ["text", "number", "password", "email", "textarea", "tel"].includes(item.inputType)}
                 <SimpleInput type={item.inputType} origin={item} />            
@@ -102,6 +125,11 @@
         .title {
             text-align: center;
             margin-bottom: 20px;
+        }
+
+        .hint {
+            font-size: .8rem;
+            opacity: .7;
         }
 
         p {

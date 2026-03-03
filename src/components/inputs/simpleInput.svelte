@@ -7,6 +7,9 @@
     export let origin = {};
 
     const onInput = (...args) => {
+        if(type == "tel")
+            inputFormatTel(...args);
+        
         if(origin.onInput)
             origin.onInput(...args);
 
@@ -15,9 +18,6 @@
         
         if(type == "textarea")
             textAreaResize(...args);
-
-        if(type == "tel")
-            inputFormatTel(...args);
     }
 
     let input;
@@ -44,9 +44,10 @@
     let ignoredFormat = false;
     const inputFormatTel = (e) => {
         const { value } = input;
+
+        const format = formatNumber(value, ignoredFormat);
         
-        if(!ignoredFormat)
-            input.value = formatNumber(value);
+        input.value = format;
     }
 </script>
 
