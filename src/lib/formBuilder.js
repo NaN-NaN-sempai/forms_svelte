@@ -66,6 +66,7 @@ export class Form_Body {
     values() {
         return this.inputs().map(input => {
             let value = input.value;
+            
 
             if(input.inputType == "select") {                
                 value = input.items.filter(({selected}) => selected).map(e=>e.sendValue);
@@ -75,6 +76,7 @@ export class Form_Body {
             }
 
             return {
+                type: input.inputType,
                 name: input.name,
                 value: value,
             }

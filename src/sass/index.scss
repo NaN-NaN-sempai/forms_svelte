@@ -12,12 +12,11 @@
     -webkit-tap-highlight-color: transparent;
     outline: none;
 
-    --time: .2s;
 
     transition:
-        background var(--time),
-        color var(--time),
-        border var(--time);
+        background var(--time, 0s),
+        color var(--time, 0s),
+        border var(--time, 0s);
 }
 
 object {
@@ -28,6 +27,7 @@ html, body {
     width: 100vw;
 }
 body {
+    --time: .2s;
     background-color: palette.$mainColor;
 }
 
