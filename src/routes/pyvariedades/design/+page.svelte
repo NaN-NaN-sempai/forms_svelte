@@ -303,6 +303,10 @@
     onMount(() => document.body.classList.add("pyVariedades"))
 </script>
 
+<svelte:head>
+    <title> LHS Form | {data?.mantainer?.name} - {formTitle} </title>
+</svelte:head>
+
 <div class="container">
     <FormBody formContent={formContent.sections} />
 </div>
