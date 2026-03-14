@@ -208,7 +208,11 @@
             }
         >
 
-        <div class="labelSelector">            
+        <div class="labelSelector">     
+            
+            {#if other.img}
+                <img src="{other.img}" alt="{other.name}">
+            {/if}       
             <p>
                 {other.text}
             </p>

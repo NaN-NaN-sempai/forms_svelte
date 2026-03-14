@@ -80,6 +80,8 @@
             {/if}
         {:else if item.type == "mandatory"}
             <span class="mandatory"></span>
+        {:else if item.type == "banner"}
+            <img class="banner" src="{item.src}" alt="{item.config.alt}" style={item.config.style}>
         {/if}
 
         {/if}
@@ -116,6 +118,15 @@
 
         @media screen and (max-width: 740px) {
             margin-inline: 20px;
+        }
+
+        .banner {
+            display: block;
+            box-sizing: border-box;
+            margin-inline: auto;
+            max-width: 100%;
+            max-height: 600px;
+            border-radius: 10px;
         }
 
         :global(:has(#darkModeSwitch:checked)) & {

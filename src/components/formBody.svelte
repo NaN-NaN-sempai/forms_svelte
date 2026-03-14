@@ -11,7 +11,9 @@
 <form on:submit|preventDefault bind:this={form}>
 
     {#each formContent as section}
-        <MainContainer content={section} />
+        {#if !section.ignore}
+            <MainContainer content={section} />
+        {/if}
     {:else}
         EMPTY
     {/each}

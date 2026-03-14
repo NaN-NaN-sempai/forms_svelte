@@ -9,11 +9,18 @@ export class Form_Body {
     }
 
     getById(id) {
-        return this.flatMap().find(f => f.formId == id);
+        return this.flatMap().find(f => f.ID.includes(id) );
     }
 
     getListById(id) {
-        return this.flatMap().filter(f => f.formId == id);
+        return this.flatMap().filter(f => f.ID.includes(id) );
+    }
+
+    getSectionById(id) {
+        return this.sections.find(s => s.ID.includes(id));
+    }
+    getSectionsById(id) {
+        return this.sections.filter(s => s.ID.includes(id));
     }
 
     atError(atError = () => { }) {
@@ -85,6 +92,7 @@ export class Form_Body {
 }
 export class Form_Section {
     constructor(config = {}, ...children) {
+        this.ID = [];
         const defaultConfig = {
             mainSection: true
         }
@@ -94,14 +102,22 @@ export class Form_Section {
         Object.assign(this, config);
 
         this.children = children;
+    }
 
+
+    id(...id) {
+        this.ID = id;
+        return this;
     }
 }
 export class Form {
     constructor(type) {
+        this.ID = [];
         this.type = type;
         this.disabled = false;
         this.readonly = false;
+        this.ignore = false;
+
         if (type == "hr" || type == "br") {
             this.marginSize = "20px";
             this.marginType = "block";
@@ -115,8 +131,12 @@ export class Form {
         }
     }
 
-    formId(id) {
-        this.formId = id;
+    formId(...id) {
+        this.ID = id;
+        return this;
+    }
+    id(...id) {
+        this.ID = id;
         return this;
     }
 
@@ -126,7 +146,7 @@ export class Form {
     
     
     config = (obj) => {
-        Object.assign(this, obj);
+        Object.assign(this, obj);        
 
         return this;
     }
@@ -243,6 +263,13 @@ export class Form {
 
     static get mandatory() {
         return new this("mandatory");
+    }
+
+    static banner = (src, config = {}) => {
+        let inst = new this("banner");
+        inst.src = src;
+        inst.config = config;
+        return inst;
     }
 
 }
