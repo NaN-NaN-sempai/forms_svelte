@@ -338,11 +338,11 @@
     }
 
     :global(body.pyVariedades) {
-        --bgColor: #312a34;
-        --mainColor: #12182a;
+        --bgColor: #202020;
+        --mainColor: #343434;
 
-        --secondColor: #6c5ce7;
-        --secondColorLighter: #8577ff;
+        --secondColor: #dbae54;
+        --secondColorLighter: #e5b658;
 
         --mainDark: #ffffff;
         --secondDark: #3b36a3;

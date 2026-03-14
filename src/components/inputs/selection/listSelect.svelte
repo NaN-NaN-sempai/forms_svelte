@@ -346,6 +346,7 @@ $mainDarker: color-mix(in srgb, #{palette.$mainColor}, #ffa638 15%);
 
 .imageCheckBoxWrapper {
     width: 100%;
+    box-sizing: border-box;
     display: grid;
     place-items: center;
     gap: 20px;
@@ -525,7 +526,7 @@ input[type="checkbox"]:checked:after {
     }
     .imageCheckBoxContainer {
         height: 300px;
-        width: 300px;
+        width: 200px;
     }
     input[type="checkbox"]:after {
         font-size: 22px;
